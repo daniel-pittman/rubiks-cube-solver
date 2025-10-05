@@ -1,4 +1,22 @@
+# Pre-commit Configuration for Rubik's Cube Solver
+#
+# This file defines Git hooks that run automatically before each commit to ensure
+# code quality and consistency. These hooks enforce formatting standards and catch
+# common issues early in the development process.
+#
+# Installation: Run `pre-commit install` to activate these hooks
+# Manual run: `pre-commit run --all-files` to check all files
+# Skip hooks: `git commit --no-verify` (use sparingly!)
+#
+# Hook execution order:
+# 1. Black - Auto-formats Python code to PEP 8 style
+# 2. Autoflake - Removes unused imports and variables
+# 3. Isort - Organizes imports alphabetically and by type
+# 4. Pylint - Static analysis to catch bugs and enforce quality (must score ≥9.0)
+
 repos:
+  # Black: The uncompromising Python code formatter
+  # Automatically reformats code to match PEP 8 style guide
   - repo: https://github.com/psf/black
     rev: 24.8.0
     hooks:
@@ -6,8 +24,10 @@ repos:
         name: Black Formatter
         language_version: python3
         types: [ python ]
-        args: [ "--fast" ]  # Runs faster by not rechecking already formatted files
+        args: [ "--fast" ]  # Skip sanity checks for faster execution
 
+  # Autoflake: Removes unused imports and variables
+  # Helps keep code clean by removing dead code automatically
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.3.1
     hooks:
@@ -18,6 +38,9 @@ repos:
         types: [ python ]
         args: [ "--in-place", "--remove-unused-variables", "--remove-all-unused-imports" ]
 
+  # Isort: Import statement organizer
+  # Sorts imports alphabetically and separates into standard library, third-party, and local
+  # Uses Black-compatible profile to avoid conflicts with Black formatting
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
     hooks:
@@ -25,16 +48,18 @@ repos:
         name: Isort Import Sorter
         language_version: python3
         types: [ python ]
-        args: ["--profile", "black"]
+        args: ["--profile", "black"]  # Must match Black's formatting style
 
+  # Pylint: Python static code analyzer
+  # Checks for errors, enforces coding standards, and looks for code smells
+  # Configured via .pylintrc file in project root
   - repo: local
     hooks:
       - id: pylint
-        name: Pylint for solver # and other directories as needed
+        name: Pylint for solver
         entry: pylint
         language: python
         types: [ python ]
-        # Specify the directories you want to include
-        # files: ^(solver/|project2/).*\.py$
-        files: ^(solver/).*\.py$
-        args: ["--fail-under=9"]  # Set the threshold to fail if the score is below 9
+        files: ^(solver/).*\.py$    # Only check files in solver/ directory
+        args: ["--fail-under=9"]    # Require minimum score of 9.0/10.0 to pass
+                                    # Current project score: 9.07/10

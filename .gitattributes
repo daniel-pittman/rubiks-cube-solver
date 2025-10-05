@@ -1,31 +1,59 @@
+# Git Attributes Configuration for Rubik's Cube Solver
+#
+# This file ensures consistent line endings across all platforms (Windows, macOS, Linux).
+# It normalizes text files to LF (Unix-style) line endings to prevent cross-platform issues.
+#
+# Why LF instead of CRLF?
+# - Most modern tools (including Python) handle LF well on all platforms
+# - Prevents "^M" characters in scripts when switching between platforms
+# - Standard for Unix shell scripts which must use LF
+
 # Set the default behavior to automatically normalize line endings to LF
 * text=auto eol=lf
 
 # Force LF for specific types of files
+# These files MUST have LF endings to work properly across platforms
+
+# Shell and script files (required for Unix execution)
 *.sh text eol=lf
 *.bat text eol=lf
 *.ps1 text eol=lf
+
+# Source code files
 *.py text eol=lf
 *.js text eol=lf
+
+# Web files
 *.html text eol=lf
 *.css text eol=lf
+
+# Documentation and configuration
 *.md text eol=lf
 *.json text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.xml text eol=lf
 *.sql text eol=lf
+
+# All files in scripts directory
 scripts/** text eol=lf
 
 # Treat all binary files as binary and do not change their line endings
+# This prevents Git from attempting to merge or diff these files
+
+# Images
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.gif binary
 *.ico binary
+
+# Documents and archives
 *.pdf binary
 *.zip binary
 *.tar.gz binary
 *.gz binary
+
+# Executables and libraries
 *.exe binary
 *.dll binary

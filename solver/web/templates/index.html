@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube Solver - Interactive 3D</title>
+
+    <!-- Meta Tags for Social Sharing -->
+    <meta name="description" content="Interactive 3D Rubik's Cube solver with real-time visualization, mobile-friendly touch controls, and step-by-step solving animations.">
+    <meta name="keywords" content="rubiks cube, 3d visualization, solver, three.js, interactive">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- OrbitControls for camera manipulation -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- Socket.IO for real-time communication -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Loading 3D Cube...</h2>
+            <p>Initializing visualization</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="cube-icon">🧩</span>
+                    Rubik's Cube Solver
+                </h1>
+                <div class="cube-status">
+                    <span id="cube-state" class="status-badge status-solved">Solved</span>
+                    <span id="move-counter" class="move-counter">0 moves</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- 3D Cube Container -->
+            <section class="cube-section">
+                <div id="cube-container" class="cube-container">
+                    <canvas id="cube-canvas" class="cube-canvas"></canvas>
+
+                    <!-- Cube Controls Overlay -->
+                    <div class="cube-controls-overlay">
+                        <div class="touch-hint touch-hint-desktop">
+                            <span class="touch-icon">👆</span>
+                            <p>Click faces to rotate • Right-click for counter-clockwise • Drag to move camera • Scroll to zoom</p>
+                        </div>
+                        <div class="touch-hint touch-hint-mobile">
+                            <span class="touch-icon">👆</span>
+                            <p>Tap face to rotate • Double-tap for counter-clockwise • Drag to move camera</p>
+                        </div>
+
+                        <!-- Cube Rotation Controls -->
+                        <div class="cube-rotation-controls">
+                            <button id="auto-rotate-btn" class="control-btn auto-rotate-btn" title="Toggle auto-rotation">
+                                <span class="control-icon">🔄</span>
+                            </button>
+                            <button id="reset-camera-btn" class="control-btn reset-camera-btn" title="Reset camera view">
+                                <span class="control-icon">🏠</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Move Selection Popup -->
+                    <div id="move-selection-popup" class="move-selection-popup">
+                        <div class="move-selection-title">Choose Move</div>
+                        <div class="move-selection-grid">
+                            <div class="move-selection-btn" data-move-type="clockwise">↻</div>
+                            <div class="move-selection-btn" data-move-type="double">2</div>
+                            <div class="move-selection-btn" data-move-type="counter">↺</div>
+                        </div>
+                    </div>
+
+                    <!-- Move Log Panel -->
+                    <div id="move-log" class="move-log-panel">
+                        <div class="log-header">
+                            <span class="log-title">📝 Move History</span>
+                            <div class="log-header-buttons">
+                                <button class="log-toggle-btn" id="toggle-log-btn" title="Collapse log">▼</button>
+                                <button class="log-clear-btn" id="clear-log-btn" title="Clear log">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="log-content" id="log-content">
+                            <div class="log-entry">Welcome! Start making moves...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Control Panel -->
+            <section class="control-panel">
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button id="scramble-btn" class="btn btn-primary">
+                        <span class="btn-icon">🎲</span>
+                        Scramble
+                    </button>
+                    <button id="reveal-scramble-btn" class="btn btn-info reveal-scramble-btn" style="display: none;" title="Show scramble sequence">
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Reveal</span>
+                    </button>
+                    <button id="solve-btn" class="btn btn-success">
+                        <span class="btn-icon">🧠</span>
+                        Solve
+                    </button>
+                    <button id="reset-btn" class="btn btn-secondary">
+                        <span class="btn-icon">🔄</span>
+                        Reset
+                    </button>
+                </div>
+
+                <!-- Advanced Controls (Collapsible) -->
+                <div class="advanced-controls">
+                    <button id="advanced-toggle" class="toggle-btn">
+                        <span>Advanced Controls</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+
+                    <div id="advanced-panel" class="advanced-panel">
+
+                        <!-- Move Input -->
+                        <div class="control-group">
+                            <label for="move-input">Execute Move:</label>
+                            <div class="input-group">
+                                <input type="text" id="move-input" placeholder="R U R' U'" class="move-input">
+                                <button id="execute-move-btn" class="btn btn-outline">Execute</button>
+                            </div>
+                            <div class="move-suggestions">
+                                <button class="move-btn" data-move="R">R</button>
+                                <button class="move-btn" data-move="L">L</button>
+                                <button class="move-btn" data-move="U">U</button>
+                                <button class="move-btn" data-move="D">D</button>
+                                <button class="move-btn" data-move="F">F</button>
+                                <button class="move-btn" data-move="B">B</button>
+                                <button class="move-btn" data-move="R'">R'</button>
+                                <button class="move-btn" data-move="L'">L'</button>
+                                <button class="move-btn" data-move="U'">U'</button>
+                                <button class="move-btn" data-move="D'">D'</button>
+                                <button class="move-btn" data-move="F'">F'</button>
+                                <button class="move-btn" data-move="B'">B'</button>
+                            </div>
+                        </div>
+
+                        <!-- Solver Options -->
+                        <div class="control-group">
+                            <label for="algorithm-select">Solver Algorithm:</label>
+                            <select id="algorithm-select" class="select-input">
+                                <option value="auto">Auto-select</option>
+                                <option value="IDDFS">IDDFS (Optimal)</option>
+                            </select>
+                            <div class="control-row">
+                                <label for="max-depth">Max Depth:</label>
+                                <input type="range" id="max-depth" min="4" max="12" value="5" class="range-input">
+                                <span id="depth-value" class="range-value">5</span>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="step-by-step" checked>
+                                    <span class="checkbox-text">Auto-play solution</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Scramble Options -->
+                        <div class="control-group">
+                            <label for="scramble-moves">Scramble Moves:</label>
+                            <div class="control-row">
+                                <input type="range" id="scramble-moves" min="5" max="50" value="5" class="range-input">
+                                <span id="scramble-value" class="range-value">5</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Help -->
+                        <div class="control-group">
+                            <div class="help-section">
+                                <h4>🎮 How to Use</h4>
+                                <ul class="help-list">
+                                    <li><strong>Click Faces:</strong> Click on any cube face to rotate it</li>
+                                    <li><strong>Right-Click:</strong> Use right-click for counter-clockwise rotations</li>
+                                    <li><strong>Ctrl+Click:</strong> Double rotation (180°)</li>
+                                    <li><strong>Rotate View:</strong> Drag background to rotate camera, scroll to zoom</li>
+                                    <li><strong>Quick Actions:</strong> Use Scramble, Solve, and Reset buttons</li>
+                                    <li><strong>Manual Moves:</strong> Enter moves like "R U R' U'" or use move buttons</li>
+                                    <li><strong>Auto-Rotate:</strong> Click 🔄 button for automatic rotation</li>
+                                    <li><strong>Reset View:</strong> Click 🏠 button to center the cube</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Solution Display -->
+            <section id="solution-section" class="solution-section hidden">
+                <h3>Solution Steps</h3>
+                <div id="solution-steps" class="solution-steps">
+                    <!-- Solution moves will be displayed here -->
+                </div>
+                <div class="solution-controls">
+                    <button id="play-solution" class="btn btn-primary">▶️ Play</button>
+                    <button id="pause-solution" class="btn btn-secondary">⏸️ Pause</button>
+                    <button id="stop-solution" class="btn btn-secondary">⏹️ Stop</button>
+                    <button id="restore-scrambled-btn" class="btn btn-secondary">🔄 Reset to Scrambled</button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 Rubik's Cube Solver | Phase 4: Web Interface</p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Three.js</span>
+                    <span class="tech-badge">Flask</span>
+                    <span class="tech-badge">SocketIO</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container">
+        <!-- Toasts will be dynamically added here -->
+    </div>
+
+    <!-- Scramble Reveal Modal -->
+    <div id="scramble-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎲 Scramble Sequence</h2>
+                <button class="modal-close" id="close-scramble-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">This is the scramble sequence that was applied to the cube:</p>
+                <div class="scramble-sequence" id="scramble-sequence-text">
+                    <!-- Scramble will be inserted here -->
+                </div>
+                <button id="copy-scramble-btn" class="btn btn-info">
+                    <span class="btn-icon">📋</span>
+                    Copy to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/cube3d.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/move-log.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui-controls.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket-client.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

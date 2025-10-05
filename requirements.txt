@@ -1,0 +1,30 @@
+# Python Dependencies for Rubik's Cube Solver
+#
+# Installation: pip install -r requirements.txt
+# Or use setup.py: pip install -e .
+#
+# Organized by category for clarity
+
+# === Code Quality & Formatting Tools ===
+autoflake==2.3.1        # Removes unused imports and variables
+black>=23.0.0           # Opinionated Python code formatter
+flake8>=6.0.0           # Style guide enforcement (PEP 8)
+isort==6.0.1            # Import statement organizer
+pre-commit==4.2.0       # Git hook framework for running checks before commits
+pylint==3.3.7           # Static code analyzer (must score ≥9.0 in this project)
+
+# === Testing Framework ===
+pytest>=7.4.0           # Testing framework for unit and integration tests
+
+# === Web Interface (Flask) ===
+flask>=2.3.0            # Web framework for HTTP server
+flask-socketio>=5.3.0   # WebSocket support for real-time cube updates
+
+# === Desktop Application (PySide6/Qt) ===
+PySide6>=6.5.0          # Qt6 bindings for Python (GUI framework)
+PyOpenGL>=3.1.0         # OpenGL bindings for 3D rendering
+PyOpenGL-accelerate>=3.1.0  # Performance acceleration for PyOpenGL
+
+# === Core Functionality ===
+numpy>=1.24.0           # Array operations for cube state management
+kociemba>=1.2.1         # Kociemba solver algorithm (currently unused, reserved for future enhancement)
