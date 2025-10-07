@@ -141,7 +141,7 @@ python3 --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/rubiks-cube-solver.git
+git clone https://github.com/daniel-pittman/rubiks-cube-solver.git
 cd rubiks-cube-solver
 
 # Run the launcher (handles everything automatically!)
