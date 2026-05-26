@@ -200,7 +200,7 @@ package/
 # Ignore secrets file
 secrets
 
-
-
-
+# Gemini CLI nanobanana extension output (used when generating images via the
+# Imagen extension; the generated PNG is moved into docs/img/ deliberately).
+nanobanana-output/
 
