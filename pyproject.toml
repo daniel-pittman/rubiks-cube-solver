@@ -46,7 +46,7 @@ desktop = [
 # so CI and pre-commit don't disagree on formatting. Dependabot will open PRs
 # to bump these; the bump must update both files together.
 dev = [
-    "autoflake==2.3.1",
+    "autoflake==2.3.3",
     "black==24.8.0",
     "flake8>=6.0.0",
     "isort==5.13.2",
