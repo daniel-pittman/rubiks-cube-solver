@@ -155,7 +155,7 @@ The launcher will:
 
 **Menu options:**
 1. **CLI** - Command-line interface with colored cube display
-2. **Web** - Flask server with 3D visualization (opens browser to localhost:5000)
+2. **Web** - Flask server with 3D visualization (opens browser to localhost:5001)
 3. **Desktop** - PySide6 application with OpenGL 3D rendering
 4. **Tests** - Run all 28 unit tests to verify everything works
 
@@ -173,7 +173,7 @@ pip install -r requirements.txt
 
 # Run specific interface
 python -m solver.cli              # Command-line
-python -m solver.flask_app        # Web (then open localhost:5000)
+python -m solver.flask_app        # Web (then open localhost:5001)
 python -m solver.desktop_app      # Desktop GUI
 ```
 
@@ -214,7 +214,7 @@ Solution found: L' D' F' U R'
 
 ### 🌐 Web Interface
 
-**Launch**: `python -m solver.flask_app` → Open `http://localhost:5000`
+**Launch**: `python -m solver.flask_app` → Open `http://localhost:5001`
 
 **Interactive 3D Controls**:
 - **Left-click face**: Clockwise rotation

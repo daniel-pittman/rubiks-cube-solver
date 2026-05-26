@@ -465,19 +465,19 @@ def main():
     try:
         # Try the modern approach first
         socketio.run(
-            app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True
+            app, host="0.0.0.0", port=5001, debug=True, allow_unsafe_werkzeug=True
         )
     except (TypeError, RuntimeError) as e:
         logger.warning(f"Primary startup method failed: {e}")
         try:
             # Alternative approach - use regular Flask run with SocketIO
             logger.info("Trying alternative startup method...")
-            app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+            app.run(host="0.0.0.0", port=5001, debug=True, use_reloader=False)
         except Exception as e2:
             logger.error(f"Alternative startup failed: {e2}")
             # Final fallback - basic Flask without debug mode
             logger.info("Using basic Flask server...")
-            socketio.run(app, host="0.0.0.0", port=5000, debug=False)
+            socketio.run(app, host="0.0.0.0", port=5001, debug=False)
 
 
 if __name__ == "__main__":

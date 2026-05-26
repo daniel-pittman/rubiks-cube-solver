@@ -10,7 +10,7 @@
 # - Installs all dependencies from requirements.txt
 # - Provides menu to select which interface to run:
 #   1. CLI - Command line interface with colored terminal output
-#   2. Web - Flask server with 3D visualization (http://localhost:5000)
+#   2. Web - Flask server with 3D visualization (http://localhost:5001)
 #   3. Desktop - PySide6/OpenGL desktop application
 #   4. Tests - Run full test suite (28 unit tests)
 #
@@ -51,7 +51,7 @@ show_menu() {
     echo ""
     echo -e "${BLUE}Select interface to run:${NC}"
     echo "1) CLI - Command Line Interface"
-    echo "2) Web - Flask Web Application (http://localhost:5000)"
+    echo "2) Web - Flask Web Application (http://localhost:5001)"
     echo "3) Desktop - PySide6 Desktop Application (3D OpenGL)"
     echo "4) Tests - Run test suite"
     echo "5) Exit"
@@ -68,7 +68,7 @@ run_cli() {
 # Function to run Flask web app
 run_web() {
     echo -e "${GREEN}🌐 Starting Flask web application...${NC}"
-    echo -e "${YELLOW}Access the application at: http://localhost:5000${NC}"
+    echo -e "${YELLOW}Access the application at: http://localhost:5001${NC}"
     cd "$PROJECT_DIR"
     python -m solver.flask_app
 }
