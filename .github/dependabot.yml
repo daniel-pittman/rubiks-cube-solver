@@ -1,0 +1,29 @@
+# Dependabot — weekly dependency PRs for both GitHub Actions and pip.
+#
+# Why both ecosystems:
+#   * github-actions — the workflows pin third-party actions by full commit
+#     SHA. Dependabot tracks SHA-pinned references and opens a PR with the
+#     new SHA + version comment when a new tag is released upstream.
+#   * pip — pyproject.toml is the source of truth for project dependencies;
+#     Dependabot opens PRs when a tracked dependency has a new release. This
+#     is the post-publication catch for CVEs that ship in dependencies.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"

@@ -42,8 +42,9 @@ setup_venv() {
     echo -e "${YELLOW}🔧 Activating virtual environment...${NC}"
     source "$VENV_DIR/bin/activate"
 
-    # Install requirements
-    pip install -r "$PROJECT_DIR/requirements.txt"
+    # Install the project (editable) with all runtime extras + dev tools.
+    # pyproject.toml is the source of truth — see [project.optional-dependencies].
+    pip install -e "$PROJECT_DIR[all,dev]"
 }
 
 # Function to display menu

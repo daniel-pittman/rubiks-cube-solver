@@ -2,11 +2,10 @@
 
 **A Case Study in Human-AI Collaborative Software Development**
 
-![Project Status](https://img.shields.io/badge/Status-Complete-brightgreen)
-![Python](https://img.shields.io/badge/Python-3.11+-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Code Quality](https://img.shields.io/badge/Pylint-9.07%2F10-success)
-![Tests](https://img.shields.io/badge/Tests-28%20passing-brightgreen)
+[![CI](https://github.com/daniel-pittman/rubiks-cube-solver/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/daniel-pittman/rubiks-cube-solver/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/v/release/daniel-pittman/rubiks-cube-solver)](https://github.com/daniel-pittman/rubiks-cube-solver/releases)
 
 ---
 
@@ -168,8 +167,12 @@ python3 -m venv venv
 # Activate it
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+# Install the project. Pick the extras you need:
+#   .[web]       — Flask + Socket.IO for the web interface
+#   .[desktop]   — PySide6 + PyOpenGL for the desktop interface
+#   .[all]       — both web and desktop runtime extras
+#   .[dev]       — linters + pytest (add this if you'll be contributing)
+pip install -e ".[all]"
 
 # Run specific interface
 python -m solver.cli              # Command-line

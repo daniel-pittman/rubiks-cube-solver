@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rubiks-cube-solver"
+version = "1.0.0"
+description = "A Rubik's Cube solver with CLI, web (Flask + Three.js), and desktop (PySide6 + OpenGL) interfaces, developed as a human-AI collaboration case study."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Daniel Pittman" }]
+keywords = ["rubiks-cube", "solver", "iddfs", "three-js", "pyside6", "opengl", "flask", "ai-collaboration"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Puzzle Games",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+# Web interface — Flask server + Socket.IO for the 3D Three.js front-end.
+web = [
+    "flask>=2.3.0",
+    "flask-socketio>=5.3.0",
+]
+# Desktop interface — PySide6 + PyOpenGL for the hardware-accelerated 3D viewer.
+desktop = [
+    "PySide6>=6.5.0",
+    "PyOpenGL>=3.1.0",
+    "PyOpenGL-accelerate>=3.1.0",
+]
+# Everything needed to develop, test, and lint the project (matches CI). The
+# black / isort versions are pinned to match `.pre-commit-config.yaml` exactly
+# so CI and pre-commit don't disagree on formatting. Dependabot will open PRs
+# to bump these; the bump must update both files together.
+dev = [
+    "autoflake==2.3.1",
+    "black==24.8.0",
+    "flake8>=6.0.0",
+    "isort==5.13.2",
+    "pre-commit==4.2.0",
+    "pylint==3.3.7",
+    "pytest>=7.4.0",
+]
+# Convenience: install every runtime extra in one shot.
+all = [
+    "flask>=2.3.0",
+    "flask-socketio>=5.3.0",
+    "PySide6>=6.5.0",
+    "PyOpenGL>=3.1.0",
+    "PyOpenGL-accelerate>=3.1.0",
+]
+
+[project.scripts]
+rubiks-cli = "solver.cli.cli_app:main"
+
+[project.urls]
+Homepage = "https://github.com/daniel-pittman/rubiks-cube-solver"
+Repository = "https://github.com/daniel-pittman/rubiks-cube-solver"
+Issues = "https://github.com/daniel-pittman/rubiks-cube-solver/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["solver*"]
+exclude = ["solver.web.static*", "solver.web.templates*"]
+
+[tool.setuptools.package-data]
+solver = ["web/static/**/*", "web/templates/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["solver"]
+python_files = ["test_*.py"]
+addopts = "-q"
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
