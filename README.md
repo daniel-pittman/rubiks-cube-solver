@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/img/social-preview.png" alt="Rubik's Cube Solver — A Human-AI Collaboration Case Study" width="800">
+</p>
+
 # Rubik's Cube Solver
 
 **A Case Study in Human-AI Collaborative Software Development**
