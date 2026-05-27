@@ -5,6 +5,7 @@ Corrected comprehensive movement tests for Rubik's Cube implementation.
 These tests verify that each move cycles edges according to standard
 Western-style Rubik's cube notation.
 """
+
 # pylint: disable=protected-access,redefined-outer-name  # Tests need internal access
 
 import numpy as np

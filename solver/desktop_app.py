@@ -259,16 +259,14 @@ class RubiksCubeDesktopApp(QMainWindow):
         )
         self.tooltip_label.setAlignment(Qt.AlignCenter)
         self.tooltip_label.setFixedHeight(30)  # Fixed height to prevent stretching
-        self.tooltip_label.setStyleSheet(
-            """
+        self.tooltip_label.setStyleSheet("""
             background-color: #2c3e50;
             color: #ecf0f1;
             padding: 6px;
             border-top: 2px solid #34495e;
             font-size: 12px;
             font-weight: bold;
-            """
-        )
+            """)
         right_layout.addWidget(self.tooltip_label)
 
         splitter.addWidget(right_panel)
@@ -301,15 +299,13 @@ class RubiksCubeDesktopApp(QMainWindow):
         self.status_box = QLabel("🟢 Solved")
         self.status_box.setFont(QFont("Arial", 12, QFont.Bold))
         self.status_box.setAlignment(Qt.AlignCenter)
-        self.status_box.setStyleSheet(
-            """
+        self.status_box.setStyleSheet("""
             background-color: #d4edda;
             color: #155724;
             padding: 10px;
             border-radius: 5px;
             border: 2px solid #c3e6cb;
-            """
-        )
+            """)
         layout.addWidget(self.status_box)
 
         # Move counter
@@ -627,29 +623,25 @@ class RubiksCubeDesktopApp(QMainWindow):
 
         if self.cube.is_solved():
             self.status_box.setText("🟢 Solved")
-            self.status_box.setStyleSheet(
-                """
+            self.status_box.setStyleSheet("""
                 background-color: #d4edda;
                 color: #155724;
                 padding: 10px;
                 border-radius: 5px;
                 border: 2px solid #c3e6cb;
                 font-weight: bold;
-                """
-            )
+                """)
             self.status_label.setText("Ready | Cube is solved")
         else:
             self.status_box.setText("🔴 Scrambled")
-            self.status_box.setStyleSheet(
-                """
+            self.status_box.setStyleSheet("""
                 background-color: #f8d7da;
                 color: #721c24;
                 padding: 10px;
                 border-radius: 5px;
                 border: 2px solid #f5c6cb;
                 font-weight: bold;
-                """
-            )
+                """)
             self.status_label.setText("Ready | Cube is scrambled")
 
     def log_move(self, message, error=False):

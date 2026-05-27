@@ -6,6 +6,7 @@ Tests the full integration between Phase 1 (cube implementation) and Phase 2 (so
 ensuring that all cube moves can be solved correctly and solutions can be applied to return
 the cube to a solved state.
 """
+
 # pylint: disable=wrong-import-position  # Test setup requires path modification
 
 import os

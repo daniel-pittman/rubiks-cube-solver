@@ -18,7 +18,7 @@ repos:
   # Black: The uncompromising Python code formatter
   # Automatically reformats code to match PEP 8 style guide
   - repo: https://github.com/psf/black
-    rev: 24.8.0
+    rev: 26.5.1
     hooks:
       - id: black
         name: Black Formatter
@@ -29,7 +29,7 @@ repos:
   # Autoflake: Removes unused imports and variables
   # Helps keep code clean by removing dead code automatically
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.3
     hooks:
       - id: autoflake
         name: Autoflake
@@ -42,7 +42,7 @@ repos:
   # Sorts imports alphabetically and separates into standard library, third-party, and local
   # Uses Black-compatible profile to avoid conflicts with Black formatting
   - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
+    rev: 8.0.1
     hooks:
       - id: isort
         name: Isort Import Sorter
@@ -57,9 +57,23 @@ repos:
     hooks:
       - id: pylint
         name: Pylint for solver
-        entry: pylint
+        # python -m pylint puts the repo root on sys.path so first-party
+        # imports (solver.core.cube etc.) resolve during static analysis.
+        # Bare `pylint` invocation does not add cwd to sys.path and fires
+        # E0401 import-error on every solver.* reference.
+        entry: python -m pylint
+        # `language: python` builds an isolated venv. `additional_dependencies`
+        # installs pylint plus the third-party packages pylint needs to
+        # introspect (flask, flask_socketio, numpy) so static analysis of
+        # solver/flask_app.py and solver/desktop_app.py doesn't fire spurious
+        # import-error warnings. Versions match [project.optional-dependencies]
+        # in pyproject.toml; bump both files together.
         language: python
+        additional_dependencies:
+          - "pylint==4.0.5"
+          - "flask>=2.3.0"
+          - "flask-socketio>=5.3.0"
+          - "numpy>=1.24.0"
         types: [ python ]
         files: ^(solver/).*\.py$    # Only check files in solver/ directory
         args: ["--fail-under=9"]    # Require minimum score of 9.0/10.0 to pass
-                                    # Current project score: 9.07/10

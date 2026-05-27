@@ -10,6 +10,7 @@ Features:
 - Multiple solver algorithm selection
 - Move history and undo functionality
 """
+
 # pylint: disable=broad-exception-caught,no-else-return,too-many-return-statements
 # pylint: disable=too-many-branches,too-many-statements,wrong-import-position
 # pylint: disable=unused-import,too-few-public-methods

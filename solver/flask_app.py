@@ -13,6 +13,7 @@ Features:
 - Touch and mouse controls
 - Professional UI/UX
 """
+
 # pylint: disable=logging-fstring-interpolation,broad-exception-caught
 # pylint: disable=import-outside-toplevel,protected-access,too-many-nested-blocks,unused-argument
 
