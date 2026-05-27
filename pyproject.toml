@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rubiks-cube-solver"
-version = "1.0.0"
+version = "1.0.1"
 description = "A Rubik's Cube solver with CLI, web (Flask + Three.js), and desktop (PySide6 + OpenGL) interfaces, developed as a human-AI collaboration case study."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -47,10 +47,10 @@ desktop = [
 # to bump these; the bump must update both files together.
 dev = [
     "autoflake==2.3.3",
-    "black==24.8.0",
+    "black==26.5.1",
     "flake8>=6.0.0",
-    "isort==5.13.2",
-    "pre-commit==4.2.0",
+    "isort==8.0.1",
+    "pre-commit==4.6.0",
     "pylint==4.0.5",
     "pytest>=7.4.0",
 ]
@@ -86,7 +86,12 @@ addopts = "-q"
 
 [tool.black]
 line-length = 88
-target-version = ["py310", "py311", "py312"]
+# Format for Python 3.10+ compatibility. Including newer target versions in
+# this list breaks Black's AST safety check when invoked from an older Python
+# (e.g. CI's 3.10 matrix entry running Black configured for 3.12 output).
+# Single oldest-supported target keeps the safety check valid on every matrix
+# row without needing --fast.
+target-version = ["py310"]
 
 [tool.isort]
 profile = "black"
