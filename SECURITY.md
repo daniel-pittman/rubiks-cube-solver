@@ -105,9 +105,8 @@ official Claude Code GitHub App on the repo and writes the OAuth token to
 **Settings → Secrets and variables → Actions** as `CLAUDE_CODE_OAUTH_TOKEN`.
 
 When the install flow offers to drop in workflow files, **decline** — the
-upstream defaults lack SHA-pinning, the author-association gate on `@claude`,
-and the branch gate on security review. Use the hardened versions already in
-`.github/workflows/`.
+upstream defaults lack SHA-pinning and the author-association gate on
+`@claude`. Use the hardened versions already in `.github/workflows/`.
 
 - `claude-code-review.yml` runs automatically on every pull request. The
   outside-collaborator approval gate (step 1 above) is what bounds drive-by
@@ -116,10 +115,11 @@ and the branch gate on security review. Use the hardened versions already in
   issue author has at least **COLLABORATOR** access on the repository. Random
   outside users cannot trigger it even by including `@claude` in their text.
 
-#### `ANTHROPIC_API_KEY` — used by `claude-security-review.yml`
+#### Security scanning: Semgrep (OSS, no secret)
 
-The security-review action does not currently support OAuth, so this workflow
-uses a metered API key. Add it under **Settings → Secrets and variables →
-Actions → New repository secret** as `ANTHROPIC_API_KEY`. The workflow runs
-automatically on every PR whose base branch is `main` or `develop`, and can
-also be dispatched manually.
+A free, token-free Semgrep OSS scan runs first on every pull request and posts
+its findings as a single sticky comment, which the `claude-code-review.yml`
+reviewer folds into its review. It uses the `p/python`, `p/javascript`,
+`p/bash`, `p/secrets`, and `p/ci` rule packs and needs no API key. This
+replaced the metered Claude security-review job, so no `ANTHROPIC_API_KEY`
+secret is required.
