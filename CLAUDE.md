@@ -8,6 +8,13 @@
 5. **PRESERVE VERBATIM QUOTES** - Keep complete user prompts and critical guidance moments; don't over-summarize
 6. **REFERENCE EXISTING WORK** - When solving problems, check if you already solved it in earlier phases (web → desktop pattern)
 
+## Automated Review Policy
+
+The PR review workflow enforces two rules the automated reviewer applies on every pull request:
+
+- **Tests ship with code.** If a PR changes application or library source code in a way that warrants tests (new or changed behavior, bug fixes, new branches or edge cases) and does not add or update corresponding tests, the reviewer flags it as a HIGH-severity finding. Docs-only, README, comments, formatting, and pure-configuration changes (CI YAML, lockfile bumps, asset-only, version bumps) are exempt.
+- **Security findings inform the review.** A free, token-free security scan runs before the Claude review and posts its findings as a single sticky PR comment, which the reviewer folds into its analysis. Semgrep (OSS) scans with the `p/python`, `p/javascript`, `p/bash`, `p/secrets`, and `p/ci` rule packs for the Python solver, the Three.js web frontend, the shell scripts, committed secrets, and CI misconfig. `pylint` remains the Python static analyzer in CI.
+
 ## Project Overview
 **Rubik's Cube 3D Visualization App** - A comprehensive learning project for Claude Code best practices.
 
