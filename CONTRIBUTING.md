@@ -42,6 +42,15 @@ pytest
 All of these must pass. The pre-commit hook runs black, autoflake, isort, and
 pylint automatically on commit; the test suite is your responsibility.
 
+The linter versions in `pyproject.toml` (the `dev` extra) and
+`.pre-commit-config.yaml` must match exactly. Dependabot's pip PRs update only
+`pyproject.toml`, so a PR that bumps a linter there must also set the matching
+hook `rev:` (and, for pylint, the `pylint==` pin under the local hook's
+`additional_dependencies`) to the same version. `pre-commit autoupdate` moves
+each remote hook to its newest upstream tag, which can be ahead of the pin, and
+skips the local pylint hook entirely, so check the result against
+`pyproject.toml` before committing.
+
 - Add tests for any new behavior. Existing tests live under `solver/core/tests/`
   (unit) and `solver/tests/` (integration).
 - Keep the comment density consistent with the surrounding file — this project

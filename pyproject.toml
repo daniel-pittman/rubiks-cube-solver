@@ -42,9 +42,11 @@ desktop = [
     "PyOpenGL-accelerate>=3.1.0",
 ]
 # Everything needed to develop, test, and lint the project (matches CI). The
-# black / isort versions are pinned to match `.pre-commit-config.yaml` exactly
-# so CI and pre-commit don't disagree on formatting. Dependabot will open PRs
-# to bump these; the bump must update both files together.
+# autoflake / black / isort / pylint versions are pinned to match
+# `.pre-commit-config.yaml` exactly so CI and pre-commit don't disagree on
+# formatting or lint. Dependabot's pip updates bump only this file, so every
+# such bump also needs the matching hook `rev:` (or, for pylint, the pin in the
+# local hook's `additional_dependencies`) set in `.pre-commit-config.yaml`.
 dev = [
     "autoflake==2.4.0",
     "black==26.10.1",
