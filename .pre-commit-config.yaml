@@ -18,7 +18,7 @@ repos:
   # Black: The uncompromising Python code formatter
   # Automatically reformats code to match PEP 8 style guide
   - repo: https://github.com/psf/black
-    rev: 26.5.1
+    rev: 26.10.1
     hooks:
       - id: black
         name: Black Formatter
@@ -29,7 +29,7 @@ repos:
   # Autoflake: Removes unused imports and variables
   # Helps keep code clean by removing dead code automatically
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.3
+    rev: v2.4.0
     hooks:
       - id: autoflake
         name: Autoflake
@@ -70,7 +70,7 @@ repos:
         # in pyproject.toml; bump both files together.
         language: python
         additional_dependencies:
-          - "pylint==4.0.5"
+          - "pylint==4.1.4"
           - "flask>=2.3.0"
           - "flask-socketio>=5.3.0"
           - "numpy>=1.24.0"
